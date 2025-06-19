@@ -7,7 +7,6 @@ const extractPath = () => {
 const ordinatesModifier = (
   x,
   y,
-  axis,
   steps,
   xIncrementSteps,
   xDecrementSteps,
@@ -15,23 +14,19 @@ const ordinatesModifier = (
   yDecrementSteps
 ) => {
   if (xIncrementSteps) {
-    x += steps;
-    return [x, y, 0];
+    return [x + steps, y, 0];
   }
 
   if (xDecrementSteps) {
-    x -= steps;
-    return [x, y, 2];
+    return [x - steps, y, 2];
   }
 
   if (yIncrementSteps) {
-    y += steps;
-    return [x, y, 1];
+    return [x, y + steps, 1];
   }
 
   if (yDecrementSteps) {
-    y -= steps;
-    return [x, y, 3];
+    return [x, y - steps, 3];
   }
 };
 
@@ -57,7 +52,6 @@ const calcShortestPath = ([x, y, axis], route) => {
   return ordinatesModifier(
     x,
     y,
-    axis,
     steps,
     xIncrementSteps,
     xDecrementSteps,
@@ -68,13 +62,9 @@ const calcShortestPath = ([x, y, axis], route) => {
 
 const shortestPath = () => {
   const path = extractPath();
+  const initialAxis = path[0].startsWith("R") ? 0 : 3;
+  const [xAxis, yAxis] = path.reduce(calcShortestPath, [0, 0, initialAxis]);
 
-  if (path[0].startsWith("R")) {
-    const [xAxis, yAxis] = path.reduce(calcShortestPath, [0, 0, 0]);
-    return Math.abs(xAxis) + Math.abs(yAxis);
-  }
-
-  const [xAxis, yAxis] = path.reduce(calcShortestPath, [0, 0, 3]);
   return Math.abs(xAxis) + Math.abs(yAxis);
 };
 
