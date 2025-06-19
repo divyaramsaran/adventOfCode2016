@@ -1,5 +1,7 @@
 const extractPath = () => {
-  return Deno.readTextFileSync("input.txt").split(",");
+  return Deno.readTextFileSync("input.txt")
+    .split(",")
+    .map((route) => route.trim());
 };
 
 const calcShortestPath = ([x, y, axis], route) => {
@@ -18,7 +20,6 @@ const calcShortestPath = ([x, y, axis], route) => {
   const leftAndNegativeXaxis = route.startsWith("L") && axis === 2;
 
   if (rightAndYaxis || leftAndNegativeYaxis) {
-    console.log("hello");
     x += steps;
     return [x, y, 0];
   }
@@ -37,18 +38,18 @@ const calcShortestPath = ([x, y, axis], route) => {
     y -= steps;
     return [x, y, 3];
   }
-
-  return [x, y, axis];
 };
 
 const shortestPath = () => {
   const path = extractPath();
 
   if (path[0].startsWith("R")) {
-    return path.reduce(calcShortestPath, [0, 0, 0]);
+    const [xAxis, yAxis] = path.reduce(calcShortestPath, [0, 0, 0]);
+    return Math.abs(xAxis) + Math.abs(yAxis);
   }
 
-  return path.reduce(calcShortestPath, [0, 0, 3]);
+  const [xAxis, yAxis] = path.reduce(calcShortestPath, [0, 0, 3]);
+  return Math.abs(xAxis) + Math.abs(yAxis);
 };
 
 console.log(shortestPath());
