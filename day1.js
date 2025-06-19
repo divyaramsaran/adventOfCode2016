@@ -6,13 +6,21 @@ const calcShortestPath = ([x, y, axis], route) => {
   const steps = Number(route.split(/R|L/)[1]);
 
   const rightAndYaxis = route.startsWith("R") && axis === 1;
-  const leftAndNegativeYaxis =
-    route.startsWith("L") && cordinatesWithAxis.at(2) === 1;
+  const leftAndNegativeYaxis = route.startsWith("L") && axis === 3;
 
-  if (rightAndYaxis && leftAndNegativeYaxis) {
+  const leftAndYaxis = route.startsWith("L") && axis === 1;
+  const rightAndNegativeYaxis = route.startsWith("R") && axis === 3;
+
+  if (rightAndYaxis || leftAndNegativeYaxis) {
     x += steps;
     return [x, y, 0];
   }
+
+  if (leftAndYaxis || rightAndNegativeYaxis) {
+    x -= steps;
+    return [x, y, 2];
+  }
+
   return [x, y, axis];
 };
 
