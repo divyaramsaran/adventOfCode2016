@@ -4,40 +4,66 @@ const extractPath = () => {
     .map((route) => route.trim());
 };
 
-const calcShortestPath = ([x, y, axis], route) => {
-  const steps = Number(route.split(/R|L/)[1]);
-
-  const rightAndYaxis = route.startsWith("R") && axis === 1;
-  const leftAndNegativeYaxis = route.startsWith("L") && axis === 3;
-
-  const leftAndYaxis = route.startsWith("L") && axis === 1;
-  const rightAndNegativeYaxis = route.startsWith("R") && axis === 3;
-
-  const leftAndXaxis = route.startsWith("L") && axis === 0;
-  const rightAndNegativeXaxis = route.startsWith("R") && axis === 2;
-
-  const rightAndXaxis = route.startsWith("R") && axis === 0;
-  const leftAndNegativeXaxis = route.startsWith("L") && axis === 2;
-
-  if (rightAndYaxis || leftAndNegativeYaxis) {
+const ordinatesModifier = (
+  x,
+  y,
+  axis,
+  steps,
+  xIncrementSteps,
+  xDecrementSteps,
+  yIncrementSteps,
+  yDecrementSteps
+) => {
+  if (xIncrementSteps) {
     x += steps;
     return [x, y, 0];
   }
 
-  if (leftAndYaxis || rightAndNegativeYaxis) {
+  if (xDecrementSteps) {
     x -= steps;
     return [x, y, 2];
   }
 
-  if (leftAndXaxis || rightAndNegativeXaxis) {
+  if (yIncrementSteps) {
     y += steps;
     return [x, y, 1];
   }
 
-  if (rightAndXaxis || leftAndNegativeXaxis) {
+  if (yDecrementSteps) {
     y -= steps;
     return [x, y, 3];
   }
+};
+
+const calcShortestPath = ([x, y, axis], route) => {
+  const steps = Number(route.split(/R|L/)[1]);
+
+  const xIncrementSteps =
+    (route.startsWith("R") && axis === 1) ||
+    (route.startsWith("L") && axis === 3);
+
+  const xDecrementSteps =
+    (route.startsWith("L") && axis === 1) ||
+    (route.startsWith("R") && axis === 3);
+
+  const yIncrementSteps =
+    (route.startsWith("L") && axis === 0) ||
+    (route.startsWith("R") && axis === 2);
+
+  const yDecrementSteps =
+    (route.startsWith("R") && axis === 0) ||
+    (route.startsWith("L") && axis === 2);
+
+  return ordinatesModifier(
+    x,
+    y,
+    axis,
+    steps,
+    xIncrementSteps,
+    xDecrementSteps,
+    yIncrementSteps,
+    yDecrementSteps
+  );
 };
 
 const shortestPath = () => {
@@ -53,10 +79,3 @@ const shortestPath = () => {
 };
 
 console.log(shortestPath());
-
-/**
- * x - 0
- * y - 1
- * -x - 2
- * -y - 3
- */
