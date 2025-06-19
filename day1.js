@@ -11,7 +11,14 @@ const calcShortestPath = ([x, y, axis], route) => {
   const leftAndYaxis = route.startsWith("L") && axis === 1;
   const rightAndNegativeYaxis = route.startsWith("R") && axis === 3;
 
+  const leftAndXaxis = route.startsWith("L") && axis === 0;
+  const rightAndNegativeXaxis = route.startsWith("R") && axis === 2;
+
+  const rightAndXaxis = route.startsWith("R") && axis === 0;
+  const leftAndNegativeXaxis = route.startsWith("L") && axis === 2;
+
   if (rightAndYaxis || leftAndNegativeYaxis) {
+    console.log("hello");
     x += steps;
     return [x, y, 0];
   }
@@ -19,6 +26,16 @@ const calcShortestPath = ([x, y, axis], route) => {
   if (leftAndYaxis || rightAndNegativeYaxis) {
     x -= steps;
     return [x, y, 2];
+  }
+
+  if (leftAndXaxis || rightAndNegativeXaxis) {
+    y += steps;
+    return [x, y, 1];
+  }
+
+  if (rightAndXaxis || leftAndNegativeXaxis) {
+    y -= steps;
+    return [x, y, 3];
   }
 
   return [x, y, axis];
