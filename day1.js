@@ -55,14 +55,17 @@ const ordinatesModifier = (
   }
 
   if (xDecrementSteps) {
+    stepsVisited = calcXSteps(steps, x, y, stepsVisited);
     return [x - steps, y, 2, stepsVisited, firstTwiceVisited];
   }
 
   if (yIncrementSteps) {
+    stepsVisited = calcYSteps(steps, x, y, stepsVisited);
     return [x, y + steps, 1, stepsVisited, firstTwiceVisited];
   }
 
   if (yDecrementSteps) {
+    stepsVisited = calcYSteps(steps, x, y, stepsVisited);
     return [x, y - steps, 3, stepsVisited, firstTwiceVisited];
   }
 };
