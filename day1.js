@@ -4,6 +4,12 @@ const extractPath = () => {
     .map((route) => route.trim());
 };
 
+const areStepsVisited = (stepsVisited, currentSteps) => {
+  return stepsVisited.some((steps) => {
+    return steps[0] === currentSteps[0] && steps[1] === currentSteps[1];
+  });
+};
+
 const ordinatesModifier = (
   x,
   y,
@@ -30,7 +36,7 @@ const ordinatesModifier = (
   }
 };
 
-const calcShortestPath = ([x, y, axis], route) => {
+const calcShortestPath = ([x, y, axis, stepsVisited], route) => {
   const steps = Number(route.split(/R|L/)[1]);
 
   const xIncrementSteps =
@@ -63,7 +69,7 @@ const calcShortestPath = ([x, y, axis], route) => {
 const shortestPath = () => {
   const path = extractPath();
   const initialAxis = path[0].startsWith("R") ? 0 : 3;
-  const [xAxis, yAxis] = path.reduce(calcShortestPath, [0, 0, initialAxis]);
+  const [xAxis, yAxis] = path.reduce(calcShortestPath, [0, 0, initialAxis, []]);
 
   return Math.abs(xAxis) + Math.abs(yAxis);
 };
