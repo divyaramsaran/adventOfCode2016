@@ -24,6 +24,20 @@ const calcXSteps = (steps, x, y, stepsVisited) => {
   return stepsVisited;
 };
 
+const calcYSteps = (steps, x, y, stepsVisited) => {
+  if (y < 0) {
+    for (let range = 0; range <= steps; range++) {
+      stepsVisited.push([x, y + range]);
+    }
+    return stepsVisited;
+  }
+
+  for (let range = 0; range <= steps; range++) {
+    stepsVisited.push([x, y - range]);
+  }
+  return stepsVisited;
+};
+
 const ordinatesModifier = (
   x,
   y,
