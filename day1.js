@@ -10,6 +10,20 @@ const areStepsVisited = (stepsVisited, currentSteps) => {
   });
 };
 
+const calcXSteps = (steps, x, y, stepsVisited) => {
+  if (x < 0) {
+    for (let range = 0; range <= steps; range++) {
+      stepsVisited.push([x + range, y]);
+    }
+    return stepsVisited;
+  }
+
+  for (let range = 0; range <= steps; range++) {
+    stepsVisited.push([x - range, y]);
+  }
+  return stepsVisited;
+};
+
 const ordinatesModifier = (
   x,
   y,
@@ -22,6 +36,7 @@ const ordinatesModifier = (
   yDecrementSteps
 ) => {
   if (xIncrementSteps) {
+    stepsVisited = calcXSteps(steps, x, y, stepsVisited);
     return [x + steps, y, 0, stepsVisited, firstTwiceVisited];
   }
 
@@ -43,7 +58,6 @@ const calcShortestPath = (
   route
 ) => {
   const steps = Number(route.split(/R|L/)[1]);
-  stepsVisited.push([x, y]);
 
   if (firstTwiceVisited.length === 0 && areStepsVisited(stepsVisited, [x, y])) {
     firstTwiceVisited.push(x, y);
