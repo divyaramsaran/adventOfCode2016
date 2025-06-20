@@ -14,30 +14,40 @@ const ordinatesModifier = (
   x,
   y,
   steps,
+  stepsVisited,
+  firstTwiceVisited,
   xIncrementSteps,
   xDecrementSteps,
   yIncrementSteps,
   yDecrementSteps
 ) => {
   if (xIncrementSteps) {
-    return [x + steps, y, 0];
+    return [x + steps, y, 0, stepsVisited, firstTwiceVisited];
   }
 
   if (xDecrementSteps) {
-    return [x - steps, y, 2];
+    return [x - steps, y, 2, stepsVisited, firstTwiceVisited];
   }
 
   if (yIncrementSteps) {
-    return [x, y + steps, 1];
+    return [x, y + steps, 1, stepsVisited, firstTwiceVisited];
   }
 
   if (yDecrementSteps) {
-    return [x, y - steps, 3];
+    return [x, y - steps, 3, stepsVisited, firstTwiceVisited];
   }
 };
 
-const calcShortestPath = ([x, y, axis, stepsVisited], route) => {
+const calcShortestPath = (
+  [x, y, axis, stepsVisited, firstTwiceVisited],
+  route
+) => {
   const steps = Number(route.split(/R|L/)[1]);
+  stepsVisited.push([x, y]);
+
+  if (firstTwiceVisited.length === 0 && areStepsVisited(stepsVisited, [x, y])) {
+    firstTwiceVisited.push(x, y);
+  }
 
   const xIncrementSteps =
     (route.startsWith("R") && axis === 1) ||
@@ -59,6 +69,8 @@ const calcShortestPath = ([x, y, axis, stepsVisited], route) => {
     x,
     y,
     steps,
+    stepsVisited,
+    firstTwiceVisited,
     xIncrementSteps,
     xDecrementSteps,
     yIncrementSteps,
@@ -69,7 +81,11 @@ const calcShortestPath = ([x, y, axis, stepsVisited], route) => {
 const shortestPath = () => {
   const path = extractPath();
   const initialAxis = path[0].startsWith("R") ? 0 : 3;
-  const [xAxis, yAxis] = path.reduce(calcShortestPath, [0, 0, initialAxis, []]);
+  const [xAxis, yAxis, _, __, firstTwiceVisited] = path.reduce(
+    calcShortestPath,
+    [0, 0, initialAxis, [], []]
+  );
+  console.log(firstTwiceVisited);
 
   return Math.abs(xAxis) + Math.abs(yAxis);
 };
