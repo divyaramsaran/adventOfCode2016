@@ -114,9 +114,9 @@ const twiceVisitedpCoordinates = (stepsVisited) => {
   for (let position = 0; position < stepsVisited.length - 1; position++) {
     for (let target = position + 1; target < stepsVisited.length; target++) {
       if (areStepsVisited(stepsVisited[position], stepsVisited[target])) {
-        const target = [...stepsVisited[position]];
-        target.push(target);
-        matched.push(target);
+        const match = [...stepsVisited[position]];
+        match.push(target);
+        matched.push(match);
       }
     }
   }
@@ -132,7 +132,17 @@ const shortestPath = () => {
   );
   stepsVisited.push(findLastStep(stepsVisited));
 
-  return Math.abs(xAxis) + Math.abs(yAxis);
+  const firstCoordinate = twiceVisitedpCoordinates(stepsVisited).reduce(
+    (firstTwiceCoordinate, coordinate) => {
+      if (firstTwiceCoordinate.at(-1) > coordinate.at(-1)) {
+        firstTwiceCoordinate.pop();
+        firstTwiceCoordinate.push(coordinate);
+      }
+      return firstTwiceCoordinate;
+    }
+  );
+  const [x, y] = firstCoordinate;
+  return [Math.abs(xAxis) + Math.abs(yAxis), Math.abs(x) + Math.abs(y)];
 };
 
 console.log(shortestPath());
