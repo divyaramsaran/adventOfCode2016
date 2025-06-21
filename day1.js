@@ -4,21 +4,19 @@ const extractPath = () => {
     .map((route) => route.trim());
 };
 
-const areStepsVisited = (stepsVisited, currentSteps) => {
-  return stepsVisited.some((steps) => {
-    return steps[0] === currentSteps[0] && steps[1] === currentSteps[1];
-  });
+const areStepsVisited = (arr1, arr2) => {
+  return arr1[0] === arr2[0] && arr1[1] === arr2[1];
 };
 
 const calcXSteps = (steps, x, y, stepsVisited) => {
   if (x < 0) {
-    for (let range = 0; range <= steps; range++) {
+    for (let range = 0; range < steps; range++) {
       stepsVisited.push([x + range, y]);
     }
     return stepsVisited;
   }
 
-  for (let range = 0; range <= steps; range++) {
+  for (let range = 0; range < steps; range++) {
     stepsVisited.push([x - range, y]);
   }
   return stepsVisited;
@@ -26,13 +24,13 @@ const calcXSteps = (steps, x, y, stepsVisited) => {
 
 const calcYSteps = (steps, x, y, stepsVisited) => {
   if (y < 0) {
-    for (let range = 0; range <= steps; range++) {
+    for (let range = 0; range < steps; range++) {
       stepsVisited.push([x, y + range]);
     }
     return stepsVisited;
   }
 
-  for (let range = 0; range <= steps; range++) {
+  for (let range = 0; range < steps; range++) {
     stepsVisited.push([x, y - range]);
   }
   return stepsVisited;
@@ -75,11 +73,6 @@ const calcShortestPath = (
   route
 ) => {
   const steps = Number(route.split(/R|L/)[1]);
-
-  if (firstTwiceVisited.length === 0 && areStepsVisited(stepsVisited, [x, y])) {
-    firstTwiceVisited.push(x, y);
-  }
-
   const xIncrementSteps =
     (route.startsWith("R") && axis === 1) ||
     (route.startsWith("L") && axis === 3);
@@ -112,11 +105,10 @@ const calcShortestPath = (
 const shortestPath = () => {
   const path = extractPath();
   const initialAxis = path[0].startsWith("R") ? 0 : 3;
-  const [xAxis, yAxis, _, __, firstTwiceVisited] = path.reduce(
+  const [xAxis, yAxis, _, stepsVisited, firstTwiceVisited] = path.reduce(
     calcShortestPath,
     [0, 0, initialAxis, [], []]
   );
-  console.log(firstTwiceVisited);
 
   return Math.abs(xAxis) + Math.abs(yAxis);
 };
