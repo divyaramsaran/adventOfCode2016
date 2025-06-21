@@ -102,6 +102,13 @@ const calcShortestPath = (
   );
 };
 
+const findLastStep = (steps) => {
+  const [x, y] = steps.at(-1);
+  const [x1, y1] = steps.at(-2);
+  const [xDiff, yDiff] = [x - x1, y - y1];
+  return [x + xDiff, y + yDiff];
+};
+
 const shortestPath = () => {
   const path = extractPath();
   const initialAxis = path[0].startsWith("R") ? 0 : 3;
@@ -109,6 +116,8 @@ const shortestPath = () => {
     calcShortestPath,
     [0, 0, initialAxis, [], []]
   );
+  stepsVisited.push(findLastStep(stepsVisited));
+
 
   return Math.abs(xAxis) + Math.abs(yAxis);
 };
