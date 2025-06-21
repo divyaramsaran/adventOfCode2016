@@ -123,6 +123,18 @@ const twiceVisitedpCoordinates = (stepsVisited) => {
   return matched;
 };
 
+const firstPlace = (twiceVisitedpCoordinates) => {
+  return twiceVisitedpCoordinates.reduce((firstTwiceCoordinate, coordinate) => {
+    if (firstTwiceCoordinate.at(-1) > coordinate.at(-1)) {
+      firstTwiceCoordinate.pop();
+      firstTwiceCoordinate.push(coordinate);
+    }
+    return firstTwiceCoordinate;
+  });
+};
+
+const absolute = (value) => Math.abs(value);
+
 const shortestPath = () => {
   const path = extractPath();
   const initialAxis = path[0].startsWith("R") ? 0 : 3;
@@ -132,17 +144,9 @@ const shortestPath = () => {
   );
   stepsVisited.push(findLastStep(stepsVisited));
 
-  const firstCoordinate = twiceVisitedpCoordinates(stepsVisited).reduce(
-    (firstTwiceCoordinate, coordinate) => {
-      if (firstTwiceCoordinate.at(-1) > coordinate.at(-1)) {
-        firstTwiceCoordinate.pop();
-        firstTwiceCoordinate.push(coordinate);
-      }
-      return firstTwiceCoordinate;
-    }
-  );
+  const firstCoordinate = firstPlace(twiceVisitedpCoordinates(stepsVisited));
   const [x, y] = firstCoordinate;
-  return [Math.abs(xAxis) + Math.abs(yAxis), Math.abs(x) + Math.abs(y)];
+  return [absolute(xAxis) + absolute(yAxis), absolute(x) + absolute(y)];
 };
 
 console.log(shortestPath());
