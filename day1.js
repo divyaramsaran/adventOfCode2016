@@ -109,6 +109,20 @@ const findLastStep = (steps) => {
   return [x + xDiff, y + yDiff];
 };
 
+const twiceVisitedpCoordinates = (stepsVisited) => {
+  const matched = [];
+  for (let position = 0; position < stepsVisited.length - 1; position++) {
+    for (let target = position + 1; target < stepsVisited.length; target++) {
+      if (areStepsVisited(stepsVisited[position], stepsVisited[target])) {
+        const target = [...stepsVisited[position]];
+        target.push(target);
+        matched.push(target);
+      }
+    }
+  }
+  return matched;
+};
+
 const shortestPath = () => {
   const path = extractPath();
   const initialAxis = path[0].startsWith("R") ? 0 : 3;
@@ -117,7 +131,6 @@ const shortestPath = () => {
     [0, 0, initialAxis, [], []]
   );
   stepsVisited.push(findLastStep(stepsVisited));
-
 
   return Math.abs(xAxis) + Math.abs(yAxis);
 };
