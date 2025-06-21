@@ -109,28 +109,16 @@ const findLastStep = (steps) => {
   return [x + xDiff, y + yDiff];
 };
 
-const twiceVisitedpCoordinates = (stepsVisited) => {
-  const matched = [];
-  for (let position = 0; position < stepsVisited.length - 1; position++) {
-    for (let target = position + 1; target < stepsVisited.length; target++) {
-      if (areStepsVisited(stepsVisited[position], stepsVisited[target])) {
-        const match = [...stepsVisited[position]];
-        match.push(target);
-        matched.push(match);
-      }
+const findFirstRepeatedCoordinate = (visitedCoords) => {
+  const seen = new Set();
+  for (const [x, y] of visitedCoords) {
+    const key = `${x},${y}`;
+    if (seen.has(key)) {
+      return [x, y];
     }
+    seen.add(key);
   }
-  return matched;
-};
-
-const firstPlace = (twiceVisitedpCoordinates) => {
-  return twiceVisitedpCoordinates.reduce((firstTwiceCoordinate, coordinate) => {
-    if (firstTwiceCoordinate.at(-1) > coordinate.at(-1)) {
-      firstTwiceCoordinate.pop();
-      firstTwiceCoordinate.push(coordinate);
-    }
-    return firstTwiceCoordinate;
-  });
+  return null;
 };
 
 const absolute = (value) => Math.abs(value);
@@ -144,7 +132,7 @@ const shortestPath = () => {
   );
   stepsVisited.push(findLastStep(stepsVisited));
 
-  const firstCoordinate = firstPlace(twiceVisitedpCoordinates(stepsVisited));
+  const firstCoordinate = findFirstRepeatedCoordinate(stepsVisited);
   const [x, y] = firstCoordinate;
   return [absolute(xAxis) + absolute(yAxis), absolute(x) + absolute(y)];
 };
