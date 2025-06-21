@@ -4,8 +4,8 @@ const extractPath = () => {
     .map((route) => route.trim());
 };
 
-const areStepsVisited = (arr1, arr2) => {
-  return arr1[0] === arr2[0] && arr1[1] === arr2[1];
+const areStepsVisited = (coordA, coordB) => {
+  return coordA[0] === coordB[0] && coordA[1] === coordB[1];
 };
 
 const calcXSteps = (steps, x, y, stepsVisited) => {
@@ -133,8 +133,11 @@ const shortestPath = () => {
   stepsVisited.push(findLastStep(stepsVisited));
 
   const firstCoordinate = findFirstRepeatedCoordinate(stepsVisited);
-  const [x, y] = firstCoordinate;
-  return [absolute(xAxis) + absolute(yAxis), absolute(x) + absolute(y)];
+  const [currentX, currentY] = firstCoordinate;
+  return [
+    absolute(xAxis) + absolute(yAxis),
+    absolute(currentX) + absolute(currentY),
+  ];
 };
 
 console.log(shortestPath());
